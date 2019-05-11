@@ -1,0 +1,178 @@
+//1 en el input, agregar el onkeyup
+//2 obtener lo que escribimos en el input
+// 3 generar la url
+//https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=acá va lo que le pedimos en el input
+//fetch () - devuelve una promesa/promise
+// 4.1 - res.json
+// 4.2 - hacer un for por todas las peliculas
+// 4.3 - por cada pelicula que estamos iterando, creamos el LI
+// 4.4agegrar el LI que creamos dentro del UL 
+
+ 
+const input= document.getElementById('autocomplete-input');
+input.onkeyup=function () {
+    const search= input.value
+   
+fetch ('https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query='+search)
+.then(res => res.json())
+.then(data => {
+    const ul = document.querySelector('ul#autocomplete-results');
+   /*  document.getElementById('autocomplete-results'); */
+    let lis = '';
+    for (let i = 0; i < data.results.length; i++) {
+        lis += `
+          <li>
+            ${data.results[i].title}
+           </li>
+           `;
+          
+    }
+
+ul.innerHTML = lis;
+})}
+
+// Soluciones de Ezequiel
+// Solución 1
+
+/* const input = document.getElementById('autocomplete-input');
+
+input.onkeyup = function () {
+  const q = input.value;
+  // const url = 'https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=' + q;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=${q}`;
+
+  fetch(url)
+   .then(res => /* return */ //res.json())
+   /*  .then(data => {
+      const movies = data.results;
+      const ul = document.getElementById('autocomplete-results');
+
+      ul.innerHTML = '';
+
+      for (let i = 0; i < movies.length; i++) {
+        const movie = movies[i];
+        // creo el li a agregar
+        const li = document.createElement('li');
+
+        li.innerText = movie.title;
+
+        li.className = 'list-item';
+        // li.classList.add('list-item');
+
+
+        ul.appendChild(li);
+      }
+
+      ul.style.display = 'block';
+    })
+} */ 
+
+ // Solución 2 
+
+/* const input = document.getElementById('autocomplete-input');
+
+input.onkeyup = function () {
+  const q = input.value;
+  // const url = 'https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=' + q;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=${q}`;
+
+ 
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const movies = data.results;
+      const ul = document.getElementById('autocomplete-results');
+
+      ul.innerHTML = '';
+
+      for (let i = 0; i < movies.length; i++) {
+        const movie = movies[i];
+        // creo el li a agregar
+        const li = `<li class="list-item">${movie.title}</li>`;
+
+        ul.innerHTML += li;
+      }
+
+      ul.style.display = 'block';
+    })
+} */
+/* solucion 3:
+```const input = document.getElementById('autocomplete-input');
+
+input.onkeyup = function () {
+  const q = input.value;
+  // const url = 'https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=' + q;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=${q}`;
+
+  fetch(url)
+    .then(res =>  res.json())
+    .then(data => {
+      const movies = data.results;
+      const ul = document.getElementById('autocomplete-results');
+
+      ul.innerHTML = '';
+
+      // movies.forEach( function (movie) {
+      //   // creo el li a agregar
+      //   const li = `<li class="list-item">${movie.title}</li>`;
+      //   // appendeo el li dentro del ul
+      //   ul.innerHTML += li;
+      // });
+      movies.forEach(movie => ul.innerHTML += `<li class="list-item">${movie.title}</li>`);
+
+      ul.style.display = 'block';
+    })
+}```
+
+
+Eze [13:01]
+solución 4:
+```const input = document.getElementById('autocomplete-input');
+
+input.onkeyup = function () {
+  const q = input.value;
+  // const url = 'https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=' + q;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=${q}`;
+
+  fetch(url)
+    .then(res =>  res.json())
+    .then(data => {
+      const movies = data.results;
+      const ul = document.getElementById('autocomplete-results');
+
+      ul.innerHTML = movies.map(movie => `<li class="list-item">${movie.title}</li>`).join('');
+
+      ul.style.display = 'block';
+    })
+}
+
+
+Eze [13:10]
+solución final (se puede mejorar!):
+const input = document.getElementById('autocomplete-input');
+
+input.onkeyup = function () {
+  const q = input.value;
+  // const url = 'https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=' + q;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=a70dbfe19b800809dfdd3e89e8532c9e&query=${q}`;
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const movies = data.results;
+      const ul = document.getElementById('autocomplete-results');
+
+      ul.innerHTML = movies.map(movie => `<li class="list-item">${movie.title}</li>`).join('');
+
+      ul.style.display = 'block';
+
+      document
+        .querySelectorAll('li.list-item')
+        .forEach(function (li) {
+          li.addEventListener('click', function (e) {
+            input.value = e.target.innerHTML;
+            ul.style.display = 'none';
+          })
+        })
+    })
+} */
